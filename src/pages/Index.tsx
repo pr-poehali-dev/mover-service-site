@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -94,6 +95,7 @@ const Index = () => {
   const [hasElevator, setHasElevator] = useState('');
   const [workers, setWorkers] = useState('2');
   const [calculatedPrice, setCalculatedPrice] = useState<number | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const calculatePrice = () => {
     let basePrice = 0;
@@ -120,6 +122,7 @@ const Index = () => {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     element?.scrollIntoView({ behavior: 'smooth' });
+    setMobileMenuOpen(false);
   };
 
   return (
@@ -139,9 +142,32 @@ const Index = () => {
               <button onClick={() => scrollToSection('about')} className="text-sm font-medium hover:text-accent transition-colors">О компании</button>
               <button onClick={() => scrollToSection('contacts')} className="text-sm font-medium hover:text-accent transition-colors">Контакты</button>
             </div>
-            <Button onClick={() => scrollToSection('contacts')} className="bg-accent hover:bg-accent/90">
-              Заказать звонок
-            </Button>
+            <div className="flex items-center gap-3">
+              <Button onClick={() => scrollToSection('contacts')} className="hidden sm:flex bg-accent hover:bg-accent/90">
+                Заказать звонок
+              </Button>
+              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                <SheetTrigger asChild className="md:hidden">
+                  <Button variant="ghost" size="icon">
+                    <Icon name="Menu" size={24} />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="w-[280px]">
+                  <div className="flex flex-col gap-6 mt-8">
+                    <button onClick={() => scrollToSection('services')} className="text-lg font-medium hover:text-accent transition-colors text-left">Услуги</button>
+                    <button onClick={() => scrollToSection('price')} className="text-lg font-medium hover:text-accent transition-colors text-left">Прайс</button>
+                    <button onClick={() => scrollToSection('calculator')} className="text-lg font-medium hover:text-accent transition-colors text-left">Калькулятор</button>
+                    <button onClick={() => scrollToSection('reviews')} className="text-lg font-medium hover:text-accent transition-colors text-left">Отзывы</button>
+                    <button onClick={() => scrollToSection('about')} className="text-lg font-medium hover:text-accent transition-colors text-left">О компании</button>
+                    <button onClick={() => scrollToSection('contacts')} className="text-lg font-medium hover:text-accent transition-colors text-left">Контакты</button>
+                    <Button onClick={() => scrollToSection('contacts')} className="bg-accent hover:bg-accent/90 w-full mt-4">
+                      <Icon name="Phone" size={18} className="mr-2" />
+                      Заказать звонок
+                    </Button>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
           </nav>
         </div>
       </header>
